@@ -19,4 +19,4 @@ jobs:
         uses: ./.github/actions/init-release
         with:
           Name: ${{ github.event.inputs.Name }}
-          myToken: ${{ secrets.GITHUB_TOKEN }}
+          myToken: ${{ secrets.MY_TOKEN }}
