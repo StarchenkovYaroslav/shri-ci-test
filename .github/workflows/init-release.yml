@@ -8,7 +8,7 @@ on:
         required: true
 
 jobs:
-  Hello:
+  InitRelease:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Init release
-        uses: ./.github/actions/hello
+        uses: ./.github/actions/init-release
         with:
           Name: ${{ github.event.inputs.Name }}
           myToken: ${{ secrets.GITHUB_TOKEN }}
