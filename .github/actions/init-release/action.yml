@@ -1,5 +1,5 @@
-name: Hello
-description: Greet someone
+name: Init release
+description: Init release
 
 runs:
   using: node12
