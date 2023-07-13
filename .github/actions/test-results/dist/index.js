@@ -9667,7 +9667,7 @@ function main() {
                 core.setFailed('issue not found');
                 return;
             }
-            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace(/### Результаты тестов:.*/, `$&\n${jobInfo}`);
+            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace(/### Результаты тестов:[\s\S]*/, `$&\n${jobInfo}`);
             yield octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
