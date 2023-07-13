@@ -9653,7 +9653,7 @@ function main() {
                 core.setFailed('job not found');
                 return;
             }
-            const jobInfo = `- [${testJob.name}](${testJob.html_url}) ${new Date().toDateString()} ${testJob.conclusion}}`;
+            const jobInfo = `- [${testJob.name}](${testJob.html_url}): ${new Date().toDateString()} | ${testJob.conclusion}`;
             const responseIssues = yield octokit.request('GET /repos/{owner}/{repo}/issues', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
