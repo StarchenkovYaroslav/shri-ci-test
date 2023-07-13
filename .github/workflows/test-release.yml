@@ -40,4 +40,4 @@ jobs:
         with:
           myToken: ${{ secrets.MY_TOKEN }}
           jobName: 'Test'
-          headBranch: GITHUB_HEAD_REF
+          headBranch: ${ GITHUB_HEAD_REF }
