@@ -1,11 +1,6 @@
 name: Init release
 
-on:
-  workflow_dispatch:
-    inputs:
-      Name:
-        description: Release name
-        required: true
+on: [workflow_dispatch]
 
 jobs:
   InitRelease:
@@ -18,5 +13,4 @@ jobs:
       - name: Init release
         uses: ./.github/actions/init-release
         with:
-          Name: ${{ github.event.inputs.Name }}
           myToken: ${{ secrets.MY_TOKEN }}
