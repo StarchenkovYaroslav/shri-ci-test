@@ -30,6 +30,7 @@ jobs:
   testResults:
     name: Test results
     needs: [test]
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
