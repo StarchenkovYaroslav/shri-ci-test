@@ -9658,6 +9658,7 @@ function main() {
                 repo: github.context.repo.repo,
                 issue_number: issue.number,
                 body: issueBody,
+                sate: 'closed',
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
