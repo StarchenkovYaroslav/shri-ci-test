@@ -9657,18 +9657,18 @@ function main() {
             });
             const commitMessages = diff.data.commits.map(commit => `- ${commit.commit.message}`).join('\n');
             const issueBody = `
-      ## ${name}
-      **Дата инициации:** ${new Date().toISOString()}
-      
-      **Автор:** ${github.context.repo.owner}
-      
-      **Дата деплоя:**
-      
-      ### Изменения с прошлого релиза:
-      ${commitMessages}
-      
-      ### Результаты тестов:
-      `;
+    ## ${name}
+    **Дата инициации:** ${new Date().toISOString()}
+    
+    **Автор:** ${github.context.repo.owner}
+    
+    **Дата деплоя:**
+    
+    ### Изменения с прошлого релиза:
+    ${commitMessages}
+    
+    ### Результаты тестов:
+    `;
             yield octokit.request('POST /repos/{owner}/{repo}/issues', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
