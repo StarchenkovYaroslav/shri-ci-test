@@ -9641,6 +9641,7 @@ function main() {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 labels: 'release',
+                state: 'all',
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
