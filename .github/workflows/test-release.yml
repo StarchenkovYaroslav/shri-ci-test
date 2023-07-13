@@ -39,3 +39,5 @@ jobs:
         uses: ./.github/actions/test-results
         with:
           myToken: ${{ secrets.MY_TOKEN }}
+          jobName: 'Test'
+          headBranch: ${{ vars.GITHUB_HEAD_REF }}

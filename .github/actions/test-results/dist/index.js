@@ -9636,6 +9636,8 @@ function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const token = core.getInput('myToken');
+            const jobName = core.getInput('jobName');
+            const headBranch = core.getInput('headBranch');
             const octokit = github.getOctokit(token);
             const result = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
                 owner: github.context.repo.owner,
@@ -9645,7 +9647,13 @@ function main() {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
-            core.info(result.data.jobs.map(job => job.name).join('\n'));
+            const testJob = result.data.jobs.find(job => job.name === jobName);
+            if (!testJob) {
+                core.setFailed('job not found');
+                return;
+            }
+            const jobInfo = `- [${testJob.name}](${testJob.run_url}) ${testJob.status}`;
+            core.info(headBranch);
         }
         catch (error) {
             // @ts-ignore
