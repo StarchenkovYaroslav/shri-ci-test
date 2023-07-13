@@ -9649,6 +9649,8 @@ function main() {
                 }
             });
             const commitMessages = diff.data.commits.map(commit => `- ${commit.commit.message}`).join('\n');
+            core.info(headBranch);
+            core.info(commitMessages);
             const responseIssues = yield octokit.request('GET /repos/{owner}/{repo}/issues', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
