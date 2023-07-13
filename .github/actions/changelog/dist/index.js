@@ -9649,8 +9649,6 @@ function main() {
                 }
             });
             const commitMessages = diff.data.commits.map(commit => `- ${commit.commit.message}`).join('\n');
-            core.info(headBranch);
-            core.info(commitMessages);
             const responseIssues = yield octokit.request('GET /repos/{owner}/{repo}/issues', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
@@ -9664,7 +9662,7 @@ function main() {
                 core.setFailed('issue not found');
                 return;
             }
-            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace(/### Изменения с прошлого релиза:.*### Результаты тестов:.*/, `### Изменения с прошлого релиза:\n\n${commitMessages}\n\n### Результаты тестов:`);
+            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace(/### Изменения с прошлого релиза:[\s\S]### Результаты тестов:/, `### Изменения с прошлого релиза:\n\n${commitMessages}\n\n### Результаты тестов:`);
             yield octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
