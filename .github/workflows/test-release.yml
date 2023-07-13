@@ -25,8 +25,13 @@ jobs:
         run: npm run test-ci
 
       - name: Test e2e
-        run: npx playwright install --with-deps && npm run e2e-ci
+        run: npx playwright install --with-deps chromium && npm run e2e-ci
 
+  testResults:
+    name: Test results
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
       - name: Test results
         uses: ./.github/actions/test-results
         with:

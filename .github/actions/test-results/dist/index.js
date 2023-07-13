@@ -9645,8 +9645,7 @@ function main() {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
-            result.data.jobs.map(job => job.status);
-            core.info(result.data.jobs.map(job => job.status).join('\n'));
+            core.info(result.data.jobs.map(job => job.name).join('\n'));
         }
         catch (error) {
             // @ts-ignore
