@@ -9675,7 +9675,7 @@ function main() {
             yield octokit.request('POST /repos/{owner}/{repo}/pulls', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
-                title: `Release-${name}`,
+                title: `release-${name}`,
                 body: 'New release',
                 head: `prerelease-${name}`,
                 base: 'release',

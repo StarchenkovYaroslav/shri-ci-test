@@ -9637,7 +9637,7 @@ function main() {
         try {
             const token = core.getInput('myToken');
             const jobName = core.getInput('jobName');
-            const headBranch = core.getInput('headBranch');
+            const pullRequestTitle = core.getInput('pullRequestTitle');
             const octokit = github.getOctokit(token);
             const result = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
                 owner: github.context.repo.owner,
@@ -9653,7 +9653,7 @@ function main() {
                 return;
             }
             const jobInfo = `- [${testJob.name}](${testJob.run_url}) ${testJob.status}`;
-            core.info(headBranch);
+            core.info(pullRequestTitle);
         }
         catch (error) {
             // @ts-ignore
