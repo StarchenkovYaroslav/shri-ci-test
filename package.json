@@ -1,4 +1,5 @@
 {
+    "homepage": "https://starchenkovyaroslav.github.io/shri-ci",
     "name": "unit-demo-cra",
     "version": "0.1.0",
     "homepage": ".",
@@ -28,6 +29,8 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d build",
         "eject": "react-scripts eject",
         "test": "react-scripts test",
         "e2e": "playwright test --project=chromium --headed && playwright show-report",
@@ -62,6 +65,7 @@
         "@commitlint/config-conventional": "^17.6.6",
         "@playwright/test": "^1.28.0",
         "@types/react-helmet": "^6.1.5",
+        "gh-pages": "^5.0.0",
         "husky": "^8.0.3",
         "jest-html-reporter": "^3.7.0"
     }
