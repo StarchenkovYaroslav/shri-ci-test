@@ -6,6 +6,20 @@ on:
       - 'release'
 
 jobs:
+  changelog:
+    name: Changelog
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Changelog
+          uses: ./.github/actions/changelog
+          with:
+            myToken: ${{ secrets.MY_TOKEN }}
+            headBranch: ${{ github.head_ref }}
+            pullRequestTitle: ${{ github.event.pull_request.title }}
+
   test:
     name: Test
     runs-on: ubuntu-latest

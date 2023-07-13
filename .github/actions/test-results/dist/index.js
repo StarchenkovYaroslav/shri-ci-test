@@ -9633,6 +9633,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __nccwpck_require__(5438);
 const core = __nccwpck_require__(2186);
 function main() {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const token = core.getInput('myToken');
@@ -9666,11 +9667,12 @@ function main() {
                 core.setFailed('issue not found');
                 return;
             }
+            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace(/### Результаты тестов:.*/, `$&\n${jobInfo}`);
             yield octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 issue_number: issue.number,
-                body: issue.body + '\n' + jobInfo,
+                body: issueBody,
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }

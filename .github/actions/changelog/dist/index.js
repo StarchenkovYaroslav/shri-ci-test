@@ -9615,7 +9615,7 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 399:
+/***/ 8598:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -9633,61 +9633,41 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __nccwpck_require__(5438);
 const core = __nccwpck_require__(2186);
 function main() {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const name = core.getInput('Name');
+            const headBranch = core.getInput('headBranch');
+            const pullRequestTitle = core.getInput('pullRequestTitle');
             const token = core.getInput('myToken');
             const octokit = github.getOctokit(token);
-            yield octokit.request('POST /repos/{owner}/{repo}/git/refs', {
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                ref: `refs/heads/prerelease-${name}`,
-                sha: github.context.sha,
-                headers: {
-                    'X-GitHub-Api-Version': '2022-11-28'
-                }
-            });
             const diff = yield octokit.request('GET /repos/{owner}/{repo}/compare/{basehead}', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
-                basehead: `release...prerelease-${name}`,
+                basehead: `release...${headBranch}`,
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
             const commitMessages = diff.data.commits.map(commit => `- ${commit.commit.message}`).join('\n');
-            const issueBody = `
-      ## ${name}
-      **Дата инициации:** ${new Date().toISOString()}
-      
-      **Автор:** ${github.context.repo.owner}
-      
-      **Дата деплоя:**
-      
-      ### Изменения с прошлого релиза:
-      ${commitMessages}
-      
-      ### Результаты тестов:
-      `;
-            yield octokit.request('POST /repos/{owner}/{repo}/issues', {
+            const responseIssues = yield octokit.request('GET /repos/{owner}/{repo}/issues', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
-                title: `release-${name}`,
-                body: issueBody,
-                labels: [
-                    'release'
-                ],
+                labels: 'release',
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
-            yield octokit.request('POST /repos/{owner}/{repo}/pulls', {
+            const issue = responseIssues.data.find(issue => issue.title === pullRequestTitle);
+            if (!issue) {
+                core.setFailed('issue not found');
+                return;
+            }
+            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace(/### Изменения с прошлого релиза:.*### Результаты тестов:.*/, `### Изменения с прошлого релиза:\n\n${commitMessages}\n\n### Результаты тестов:`);
+            yield octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
-                title: `release-${name}`,
-                body: 'New release',
-                head: `prerelease-${name}`,
-                base: 'release',
+                issue_number: issue.number,
+                body: issueBody,
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
@@ -9882,7 +9862,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(399);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(8598);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()

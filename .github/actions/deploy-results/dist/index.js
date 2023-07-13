@@ -9633,26 +9633,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __nccwpck_require__(5438);
 const core = __nccwpck_require__(2186);
 function main() {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const token = core.getInput('myToken');
-            const jobName = core.getInput('jobName');
             const pullRequestTitle = core.getInput('pullRequestTitle');
             const octokit = github.getOctokit(token);
-            const responseJobs = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                run_id: github.context.runId,
-                headers: {
-                    'X-GitHub-Api-Version': '2022-11-28'
-                }
-            });
-            const testJob = responseJobs.data.jobs.find(job => job.name === jobName);
-            if (!testJob) {
-                core.setFailed('job not found');
-                return;
-            }
-            const jobInfo = `- [${testJob.name}](${testJob.html_url}) ${testJob.conclusion}`;
             const responseIssues = yield octokit.request('GET /repos/{owner}/{repo}/issues', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
@@ -9666,11 +9652,12 @@ function main() {
                 core.setFailed('issue not found');
                 return;
             }
+            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace('**Дата деплоя:**', `**Дата деплоя:** ${new Date().toISOString()}`);
             yield octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 issue_number: issue.number,
-                body: issue.body + '\n' + jobInfo,
+                body: issueBody,
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
