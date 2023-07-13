@@ -2,7 +2,6 @@
     "homepage": "https://starchenkovyaroslav.github.io/shri-ci",
     "name": "unit-demo-cra",
     "version": "0.1.0",
-    "homepage": ".",
     "private": true,
     "dependencies": {
         "@testing-library/jest-dom": "^5.16.5",
