@@ -9637,15 +9637,16 @@ function main() {
         try {
             const token = core.getInput('myToken');
             const octokit = github.getOctokit(token);
-            const result = yield octokit.request('GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations', {
+            const result = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
-                check_run_id: github.context.runId,
+                run_id: github.context.runId,
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
-            core.info(result.data.map(res => res.message).join('\n'));
+            result.data.jobs.map(job => job.status);
+            core.info(result.data.jobs.map(job => job.status).join('\n'));
         }
         catch (error) {
             // @ts-ignore

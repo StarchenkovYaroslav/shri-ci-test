@@ -27,7 +27,7 @@ jobs:
       - name: Test e2e
         run: npx playwright install --with-deps && npm run e2e-ci
 
-      - name: Init release
+      - name: Test results
         uses: ./.github/actions/test-results
         with:
           myToken: ${{ secrets.MY_TOKEN }}
