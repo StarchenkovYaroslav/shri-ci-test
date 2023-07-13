@@ -8,17 +8,17 @@ on:
 jobs:
   changelog:
     name: Changelog
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-        - name: Changelog
-          uses: ./.github/actions/changelog
-          with:
-            myToken: ${{ secrets.MY_TOKEN }}
-            headBranch: ${{ github.head_ref }}
-            pullRequestTitle: ${{ github.event.pull_request.title }}
+      - name: Changelog
+        uses: ./.github/actions/changelog
+        with:
+          myToken: ${{ secrets.MY_TOKEN }}
+          headBranch: ${{ github.head_ref }}
+          pullRequestTitle: ${{ github.event.pull_request.title }}
 
   test:
     name: Test
