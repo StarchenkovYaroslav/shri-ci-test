@@ -9639,14 +9639,14 @@ function main() {
             const token = core.getInput('myToken');
             const pullRequestTitle = core.getInput('pullRequestTitle');
             const octokit = github.getOctokit(token);
-            const responsePagesBuild = yield octokit.request('GET /repos/{owner}/{repo}/pages/builds/latest', {
+            const responseArtefacts = yield octokit.request('GET /repos/{owner}/{repo}/actions/artifacts', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
-            const buildUrl = responsePagesBuild.data.url;
+            const artInfo = responseArtefacts.data.artifacts.map(art => `[${art.name}](${art.archive_download_url}) | ${art.created_at}`);
             const responseIssues = yield octokit.request('GET /repos/{owner}/{repo}/issues', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
@@ -9665,7 +9665,7 @@ function main() {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 issue_number: issue.number,
-                body: issueBody + '\n' + buildUrl,
+                body: issueBody + '\n' + artInfo,
                 state: 'closed',
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
