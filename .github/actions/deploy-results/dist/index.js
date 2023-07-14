@@ -9639,6 +9639,7 @@ function main() {
             const token = core.getInput('myToken');
             const pullRequestTitle = core.getInput('pullRequestTitle');
             const pullRequestNumber = core.getInput('pullRequestNumber');
+            const releaseVersion = pullRequestTitle.replace('release-', '');
             const octokit = github.getOctokit(token);
             const responsePull = yield octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}/commits', {
                 owner: github.context.repo.owner,
@@ -9648,7 +9649,17 @@ function main() {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
-            const commits = responsePull.data.map(commit => `[${commit.commit.message}](${commit.html_url})`).join('\n');
+            const commitSHA = responsePull.data[responsePull.data.length - 1].sha;
+            const releaseStateLink = `https://github.com/StarchenkovYaroslav/shri-ci/tree/${commitSHA}`;
+            yield octokit.request('POST /repos/{owner}/{repo}/git/refs', {
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+                ref: `refs/tags/v${releaseVersion}`,
+                sha: commitSHA,
+                headers: {
+                    'X-GitHub-Api-Version': '2022-11-28'
+                }
+            });
             const responseRun = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
@@ -9676,7 +9687,7 @@ function main() {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 issue_number: issue.number,
-                body: issueBody + '\n' + artInfo + '\n' + commits,
+                body: issueBody + '\n' + artInfo + '\n' + releaseStateLink,
                 state: 'closed',
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
