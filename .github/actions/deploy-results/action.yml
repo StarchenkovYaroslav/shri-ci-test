@@ -2,5 +2,5 @@ name: Deploy release
 description: Deploy release
 
 runs:
-  using: node12
+  using: node16
   main: dist/index.js

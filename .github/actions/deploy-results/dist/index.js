@@ -9633,7 +9633,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __nccwpck_require__(5438);
 const core = __nccwpck_require__(2186);
 function main() {
-    var _a;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const token = core.getInput('myToken');
@@ -9646,7 +9646,25 @@ function main() {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
-            const artInfo = responseArtefacts.data.artifacts.map(art => `[${art.name}](${art.url}) | ${art.created_at}`).join('\n');
+            const lastPagesArtifact = responseArtefacts.data.artifacts.filter(art => art.name === 'github-pages')[0];
+            if (!lastPagesArtifact) {
+                core.setFailed('artefact not found');
+                return;
+            }
+            const runId = (_a = lastPagesArtifact === null || lastPagesArtifact === void 0 ? void 0 : lastPagesArtifact.workflow_run) === null || _a === void 0 ? void 0 : _a.id;
+            if (!runId) {
+                core.setFailed('runId not found');
+                return;
+            }
+            const responseRun = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}', {
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+                run_id: runId,
+                headers: {
+                    'X-GitHub-Api-Version': '2022-11-28'
+                }
+            });
+            const artInfo = `[Артефакт сборки](${responseRun.data.html_url})`;
             const responseIssues = yield octokit.request('GET /repos/{owner}/{repo}/issues', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
@@ -9660,7 +9678,7 @@ function main() {
                 core.setFailed('issue not found');
                 return;
             }
-            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace('**Дата деплоя:**', `**Дата деплоя:** ${new Date().toISOString()}`);
+            const issueBody = (_b = issue.body) === null || _b === void 0 ? void 0 : _b.replace('**Дата деплоя:**', `**Дата деплоя:** ${new Date().toISOString()}`);
             yield octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
