@@ -9640,8 +9640,8 @@ function main() {
             const pullRequestTitle = core.getInput('pullRequestTitle');
             const octokit = github.getOctokit(token);
             const responsePagesBuild = yield octokit.request('GET /repos/{owner}/{repo}/pages/builds/latest', {
-                owner: 'OWNER',
-                repo: 'REPO',
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
