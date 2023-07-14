@@ -9638,7 +9638,17 @@ function main() {
         try {
             const token = core.getInput('myToken');
             const pullRequestTitle = core.getInput('pullRequestTitle');
+            const pullRequestNumber = core.getInput('pullRequestNumber');
             const octokit = github.getOctokit(token);
+            const responsePull = yield octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}/commits', {
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+                pull_number: Number(pullRequestNumber),
+                headers: {
+                    'X-GitHub-Api-Version': '2022-11-28'
+                }
+            });
+            const commits = responsePull.data.map(commit => `[${commit.commit.message}](${commit.html_url})`).join('\n');
             const responseRun = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
@@ -9661,12 +9671,12 @@ function main() {
                 core.setFailed('issue not found');
                 return;
             }
-            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace('**Дата деплоя:**', `**Дата деплоя:** ${new Date().toISOString()}`);
+            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace('**Дата деплоя:**', `**Дата деплоя:** ${new Date().toDateString()}`);
             yield octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 issue_number: issue.number,
-                body: issueBody + '\n' + artInfo,
+                body: issueBody + '\n' + artInfo + '\n' + commits,
                 state: 'closed',
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'

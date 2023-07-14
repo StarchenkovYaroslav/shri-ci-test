@@ -59,3 +59,4 @@ jobs:
         with:
           myToken: ${{ secrets.MY_TOKEN }}
           pullRequestTitle: ${{ github.event.pull_request.title }}
+          pullRequestNumber: ${{ github.event.pull_request.number }}
