@@ -9640,7 +9640,7 @@ function main() {
             const responseIssues = yield octokit.paginate(octokit.rest.issues.listForRepo, {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
-                per_page: 100,
+                per_page: 30,
                 labels: 'release',
                 state: 'all',
                 headers: {
