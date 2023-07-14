@@ -9639,7 +9639,7 @@ function main() {
             const token = core.getInput('myToken');
             const pullRequestTitle = core.getInput('pullRequestTitle');
             const pullRequestNumber = core.getInput('pullRequestNumber');
-            const releaseVersion = pullRequestTitle.replace('release-', '');
+            const releaseVersion = pullRequestTitle.replace('release-v', '');
             const octokit = github.getOctokit(token);
             const responsePull = yield octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}/commits', {
                 owner: github.context.repo.owner,
@@ -9650,7 +9650,7 @@ function main() {
                 }
             });
             const commitSHA = responsePull.data[responsePull.data.length - 1].sha;
-            const releaseStateLink = `https://github.com/StarchenkovYaroslav/shri-ci/tree/${commitSHA}`;
+            const releaseStateLink = `[Состояние деплоя](https://github.com/StarchenkovYaroslav/shri-ci/tree/${commitSHA})`;
             yield octokit.request('POST /repos/{owner}/{repo}/git/refs', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
@@ -9668,7 +9668,7 @@ function main() {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
-            const artInfo = `[Страница с артефактом](${responseRun.data.html_url})`;
+            const artLink = `[Страница с артефактом](${responseRun.data.html_url})`;
             const responseIssues = yield octokit.request('GET /repos/{owner}/{repo}/issues', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
@@ -9682,12 +9682,12 @@ function main() {
                 core.setFailed('issue not found');
                 return;
             }
-            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace('**Дата деплоя:**', `**Дата деплоя:** ${new Date().toDateString()}`);
+            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace('**Дата деплоя:**', `**Дата деплоя:** ${new Date().toDateString()}\n\n${artLink}\n\n${releaseStateLink}`);
             yield octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 issue_number: issue.number,
-                body: issueBody + '\n' + artInfo + '\n' + releaseStateLink,
+                body: issueBody,
                 state: 'closed',
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
