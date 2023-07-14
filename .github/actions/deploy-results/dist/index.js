@@ -9646,7 +9646,7 @@ function main() {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
-            const artInfo = responseArtefacts.data.artifacts.map(art => `[${art.name}](${art.archive_download_url}) | ${art.created_at}`).join('\n');
+            const artInfo = responseArtefacts.data.artifacts.map(art => `[${art.name}](${art.url}) | ${art.created_at}`).join('\n');
             const responseIssues = yield octokit.request('GET /repos/{owner}/{repo}/issues', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
