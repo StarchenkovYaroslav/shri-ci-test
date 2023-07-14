@@ -9637,16 +9637,17 @@ function main() {
         try {
             const token = core.getInput('myToken');
             const octokit = github.getOctokit(token);
-            const responseIssues = yield octokit.request('GET /repos/{owner}/{repo}/issues', {
+            const responseIssues = yield octokit.paginate(octokit.rest.issues.listForRepo, {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
+                per_page: 100,
                 labels: 'release',
                 state: 'all',
                 headers: {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
-            const version = responseIssues.data.length + 1;
+            const version = responseIssues.length + 1;
             core.info(String(version));
             yield octokit.request('POST /repos/{owner}/{repo}/git/refs', {
                 owner: github.context.repo.owner,
