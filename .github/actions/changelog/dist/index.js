@@ -9648,7 +9648,9 @@ function main() {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
-            const commitMessages = diff.data.commits.map(commit => `- [${commit.commit.message}](${commit.html_url})`).join('\n');
+            const commitMessages = diff.data.commits
+                .filter(commit => !commit.commit.message.includes('Merge pull request'))
+                .map(commit => `- [${commit.commit.message}](${commit.html_url})`).join('\n');
             const responseIssues = yield octokit.request('GET /repos/{owner}/{repo}/issues', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
