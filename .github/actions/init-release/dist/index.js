@@ -9648,7 +9648,6 @@ function main() {
                 }
             });
             const version = responseIssues.length + 1;
-            core.info(String(version));
             yield octokit.request('POST /repos/{owner}/{repo}/git/refs', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,

@@ -30,9 +30,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build
+
+  downloadArtifact:
+    name: Download artifact
+    needs: [deployRelease]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+
   deployResults:
     name: Deploy results
-    needs: [deployRelease]
+    needs: [downloadArtifact]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
