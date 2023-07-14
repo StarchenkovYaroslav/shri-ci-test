@@ -9658,7 +9658,7 @@ function main() {
                 }
             });
             const issueBody = '## v' + version + '\n\n'
-                + '**Дата инициации:** ' + new Date().toDateString() + '\n\n'
+                + '**Дата инициации:** ' + new Date().toLocaleString() + '\n\n'
                 + '**Автор:** ' + github.context.repo.owner + '\n\n'
                 + '**Дата деплоя:** ' + '\n\n'
                 + '### Изменения с прошлого релиза:' + '\n\n'

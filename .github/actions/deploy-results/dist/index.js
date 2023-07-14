@@ -9682,7 +9682,7 @@ function main() {
                 core.setFailed('issue not found');
                 return;
             }
-            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace('**Дата деплоя:**', `**Дата деплоя:** ${new Date().toDateString()}\n\n${artLink}\n\n${releaseStateLink}`);
+            const issueBody = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.replace('**Дата деплоя:**', `**Дата деплоя:** ${new Date().toLocaleString()}\n\n${artLink}\n\n${releaseStateLink}`);
             yield octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
